@@ -1,4 +1,4 @@
-package top.jpdou.recommend.entity;
+package top.jpdou.recommend.model.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

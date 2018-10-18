@@ -1,0 +1,55 @@
+package top.jpdou.recommend.model;
+
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class ScopeConfig {
+
+    final static String DATA_TYPE_STRING = "String";    // 字符串
+    final static String DATA_TYPE_INTEGER = "Integer";  // 整数
+    final static String DATA_TYPE_BOOLEAN = "Boolean";  // 布尔值
+    final static String DATA_TYPE_FLOAT = "Float";      // 浮点数
+
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id;
+    @Id
+    private String path;
+    private String dataType;
+    private String value;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+}

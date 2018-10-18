@@ -1,4 +1,4 @@
-package top.jpdou.recommend.entity;
+package top.jpdou.recommend.model.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,16 +6,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Quote {
-    @Id
+public class SalesOrder {
+
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private Integer originId;
+    private String status;
     private Boolean isVirtual;
-    private String quoteCurrencyCode;
+    private Boolean customerId;
+    @Id
+    private String incrementId;
     private String customerEmail;
-    private String customerIsGuest;
-
+    private String orderCurrencyCode;
 
     public Integer getId() {
         return id;
@@ -33,6 +35,14 @@ public class Quote {
         this.originId = originId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Boolean getVirtual() {
         return isVirtual;
     }
@@ -41,12 +51,20 @@ public class Quote {
         isVirtual = virtual;
     }
 
-    public String getQuoteCurrencyCode() {
-        return quoteCurrencyCode;
+    public Boolean getCustomerId() {
+        return customerId;
     }
 
-    public void setQuoteCurrencyCode(String quoteCurrencyCode) {
-        this.quoteCurrencyCode = quoteCurrencyCode;
+    public void setCustomerId(Boolean customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getIncrementId() {
+        return incrementId;
+    }
+
+    public void setIncrementId(String incrementId) {
+        this.incrementId = incrementId;
     }
 
     public String getCustomerEmail() {
@@ -57,11 +75,11 @@ public class Quote {
         this.customerEmail = customerEmail;
     }
 
-    public String getCustomerIsGuest() {
-        return customerIsGuest;
+    public String getOrderCurrencyCode() {
+        return orderCurrencyCode;
     }
 
-    public void setCustomerIsGuest(String customerIsGuest) {
-        this.customerIsGuest = customerIsGuest;
+    public void setOrderCurrencyCode(String orderCurrencyCode) {
+        this.orderCurrencyCode = orderCurrencyCode;
     }
 }
