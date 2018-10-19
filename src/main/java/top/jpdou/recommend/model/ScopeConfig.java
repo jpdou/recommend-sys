@@ -9,11 +9,9 @@ import javax.persistence.Id;
 @Entity
 public class ScopeConfig {
 
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Id
     private String path;
-    private String dataType;
     private String value;
 
     public Integer getId() {
@@ -30,14 +28,6 @@ public class ScopeConfig {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public String getDataType() {
-        return dataType;
-    }
-
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
     }
 
     public String getValue() {

@@ -46,4 +46,14 @@ public class ScopeConfigManager {
         }
         return values.get(path);
     }
+
+    public void setValue(String path, String value)
+    {
+        values.put(path, value);
+
+        ScopeConfig config = new ScopeConfig();
+        config.setValue(value);
+        config.setPath(path);
+        scopeConfigRepository.save(config);
+    }
 }
