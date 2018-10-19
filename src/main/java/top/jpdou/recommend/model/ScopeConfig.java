@@ -9,11 +9,6 @@ import javax.persistence.Id;
 @Entity
 public class ScopeConfig {
 
-    final static String DATA_TYPE_STRING = "String";    // 字符串
-    final static String DATA_TYPE_INTEGER = "Integer";  // 整数
-    final static String DATA_TYPE_BOOLEAN = "Boolean";  // 布尔值
-    final static String DATA_TYPE_FLOAT = "Float";      // 浮点数
-
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @Id

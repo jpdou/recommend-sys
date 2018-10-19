@@ -34,17 +34,16 @@ public class ScopeConfigManager {
 
     public String getValue(String path)
     {
-        String value = "";
         if (!values.containsKey(path)) {
 
             Optional result = scopeConfigRepository.findById(path);
 
             if (result.isPresent()) {
                 ScopeConfig scopeConfig = (ScopeConfig) result.get();
-                value = scopeConfig.getValue();
+                String value = scopeConfig.getValue();
                 values.put(path, value);
             }
         }
-        return value;
+        return values.get(path);
     }
 }
