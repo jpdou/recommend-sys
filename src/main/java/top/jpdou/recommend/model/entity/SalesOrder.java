@@ -7,15 +7,13 @@ import javax.persistence.Id;
 
 @Entity
 public class SalesOrder {
-
+    @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private Integer originId;
     private String status;
     private Boolean isVirtual;
-    private Boolean customerId;
-    @Id
-    private String incrementId;
+    private Integer customerId;
     private String customerEmail;
     private String orderCurrencyCode;
 
@@ -51,20 +49,12 @@ public class SalesOrder {
         isVirtual = virtual;
     }
 
-    public Boolean getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Boolean customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
-    }
-
-    public String getIncrementId() {
-        return incrementId;
-    }
-
-    public void setIncrementId(String incrementId) {
-        this.incrementId = incrementId;
     }
 
     public String getCustomerEmail() {

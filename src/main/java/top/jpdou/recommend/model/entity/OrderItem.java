@@ -13,6 +13,7 @@ public class OrderItem {
     private Integer originId;
     private Integer parentId;
     private Integer productId;
+    private Integer qty;
     private Boolean isVirtual;
 
     public Integer getId() {
@@ -45,6 +46,14 @@ public class OrderItem {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getQty() {
+        return qty;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
     }
 
     public Boolean getVirtual() {
