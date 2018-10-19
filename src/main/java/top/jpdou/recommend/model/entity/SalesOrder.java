@@ -9,11 +9,11 @@ import javax.persistence.Id;
 public class SalesOrder {
     @Id
     private Integer id;
+    private Integer quoteId;
     private String status;
     private Boolean isVirtual;
     private Integer customerId;
     private String customerEmail;
-    private String orderCurrencyCode;
 
     public Integer getId() {
         return id;
@@ -21,6 +21,14 @@ public class SalesOrder {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getQuoteId() {
+        return quoteId;
+    }
+
+    public void setQuoteId(Integer quoteId) {
+        this.quoteId = quoteId;
     }
 
     public String getStatus() {

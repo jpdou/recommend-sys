@@ -20,7 +20,8 @@ import top.jpdou.recommend.model.entity.SalesOrder;
 @Component
 public class SalesOrderManager implements EntityCollector {
 
-    final static public String CONFIG_PATH_FETCH_ORDER_URL = "entity_collector/url/order";
+    final static private String CONFIG_PATH_FETCH_ORDER_URL = "entity_collector/url/order";
+    final static private String CONFIG_PATH_LAST_ORDER_ID = "entity_collector/url/last_order_id";
 
     @Autowired
     private SalesOrderRepository orderRepository;
@@ -31,11 +32,16 @@ public class SalesOrderManager implements EntityCollector {
     @Autowired
     private ScopeConfigManager scopeConfigManger;
 
-    private int orderId = 1070;
+    private int lastOrderId;
 
-    public boolean fetch() {
+    public SalesOrderManager()
+    {
+        lastOrderId = scopeConfigManger.getValueAsInteger(CONFIG_PATH_LAST_ORDER_ID);
+    }
+
+    public void fetch() {
         String baseUrl = scopeConfigManger.getValue(CONFIG_PATH_FETCH_BASE_URL);
-        String url = baseUrl + scopeConfigManger.getValue(CONFIG_PATH_FETCH_ORDER_URL).replace("{id}", String.valueOf(orderId));
+        String url = baseUrl + scopeConfigManger.getValue(CONFIG_PATH_FETCH_ORDER_URL).replace("{id}", String.valueOf(lastOrderId));
 
         System.out.println("Url: " + url);
 
@@ -60,11 +66,12 @@ public class SalesOrderManager implements EntityCollector {
                 String responseText = EntityUtils.toString(entity);
                 System.out.println(responseText);
 
-                JsonParser parse = new JsonParser();
-                JsonObject orderData = (JsonObject) parse.parse(responseText);
+                JsonParser parser = new JsonParser();
+                JsonObject orderData = (JsonObject) parser.parse(responseText);
 
                 if (!orderData.get("is_virtual").getAsBoolean()) { // 只记录非虚拟订单
 
+                    int quoteId = orderData.get("quote_id").getAsInt();
                     String customerEmail = orderData.get("customer_email").getAsString();
                     int customerId = 0;
                     if (orderData.get("customer_id") != null) {
@@ -73,7 +80,8 @@ public class SalesOrderManager implements EntityCollector {
                     String status = orderData.get("status").getAsString();
 
                     SalesOrder order = new SalesOrder();
-                    order.setId(orderId);
+                    order.setId(lastOrderId);
+                    order.setQuoteId(quoteId);
                     order.setCustomerEmail(customerEmail);
                     order.setCustomerId(customerId);
                     order.setStatus(status);
@@ -93,7 +101,7 @@ public class SalesOrderManager implements EntityCollector {
                             orderItem.setId(itemId);
                             orderItem.setProductId(productId);
                             orderItem.setQty(qty);
-                            orderItem.setParentId(orderId);
+                            orderItem.setParentId(lastOrderId);
                             orderItem.setVirtual(false);
 
                             orderItemRepository.save(orderItem);
@@ -103,8 +111,7 @@ public class SalesOrderManager implements EntityCollector {
 
                 response.close();
                 httpclient.close();
-                orderId --;
-                return true;
+
             } else {
                 System.out.println("Fetch order failed, response status is " + response.getStatusLine().getStatusCode());
             }
@@ -113,6 +120,7 @@ public class SalesOrderManager implements EntityCollector {
             e.printStackTrace();
         }
 
-        return false;
+        scopeConfigManger.setValue(CONFIG_PATH_LAST_ORDER_ID, String.valueOf(lastOrderId));
+        lastOrderId ++;
     }
 }
