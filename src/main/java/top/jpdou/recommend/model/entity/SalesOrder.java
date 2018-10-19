@@ -8,9 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class SalesOrder {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-    private Integer originId;
     private String status;
     private Boolean isVirtual;
     private Integer customerId;
@@ -23,14 +21,6 @@ public class SalesOrder {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getOriginId() {
-        return originId;
-    }
-
-    public void setOriginId(Integer originId) {
-        this.originId = originId;
     }
 
     public String getStatus() {
@@ -63,13 +53,5 @@ public class SalesOrder {
 
     public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
-    }
-
-    public String getOrderCurrencyCode() {
-        return orderCurrencyCode;
-    }
-
-    public void setOrderCurrencyCode(String orderCurrencyCode) {
-        this.orderCurrencyCode = orderCurrencyCode;
     }
 }

@@ -7,8 +7,8 @@ public interface EntityCollector {
 
 
 
-    final static public int REQUEST_SOCKET_TIMEOUT = 2000;
-    final static public int REQUEST_CONNECT_TIMEOUT = 2000;
+    final static public int REQUEST_SOCKET_TIMEOUT = 3000;
+    final static public int REQUEST_CONNECT_TIMEOUT = 3000;
 
     public boolean fetch();
 }

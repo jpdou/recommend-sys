@@ -26,10 +26,7 @@ public class SalesOrderManager implements EntityCollector {
     private SalesOrderRepository orderRepository;
 
     @Autowired
-    private SalesOrder order;
-
-    @Autowired
-    private OrderItem orderItem;
+    private OrderItemRepository orderItemRepository;
 
     @Autowired
     private ScopeConfigManager scopeConfigManger;
@@ -68,14 +65,15 @@ public class SalesOrderManager implements EntityCollector {
 
                 if (!orderData.get("is_virtual").getAsBoolean()) { // 只记录非虚拟订单
 
-                    int originId = orderData.get("entity_id").getAsInt();
-                    String orderCurrencyCode = orderData.get("order_currency_code").getAsString();
                     String customerEmail = orderData.get("customer_email").getAsString();
-                    int customerId = orderData.get("customer_id").getAsInt();
+                    int customerId = 0;
+                    if (orderData.get("customer_id") != null) {
+                        customerId = orderData.get("customer_id").getAsInt();
+                    }
                     String status = orderData.get("status").getAsString();
 
-                    order.setOriginId(originId);
-                    order.setOrderCurrencyCode(orderCurrencyCode);
+                    SalesOrder order = new SalesOrder();
+                    order.setId(orderId);
                     order.setCustomerEmail(customerEmail);
                     order.setCustomerId(customerId);
                     order.setStatus(status);
@@ -83,13 +81,23 @@ public class SalesOrderManager implements EntityCollector {
 
                     orderRepository.save(order);
 
-                    System.out.println("Order record id: " + order.getId());
-
                     for (JsonElement item : orderData.get("items").getAsJsonArray()) {
-                        int productId = ((JsonObject) item).get("product_id").getAsInt();
-                        int qty = ((JsonObject) item).get("qty_ordered").getAsInt();
-                        orderItem.setProductId(productId);
-                        orderItem.setQty(qty);
+
+                        if (!((JsonObject) item).get("is_virtual").getAsBoolean()) {
+
+                            int itemId = ((JsonObject) item).get("item_id").getAsInt();
+                            int productId = ((JsonObject) item).get("product_id").getAsInt();
+                            int qty = ((JsonObject) item).get("qty_ordered").getAsInt();
+
+                            OrderItem orderItem = new OrderItem();
+                            orderItem.setId(itemId);
+                            orderItem.setProductId(productId);
+                            orderItem.setQty(qty);
+                            orderItem.setParentId(orderId);
+                            orderItem.setVirtual(false);
+
+                            orderItemRepository.save(orderItem);
+                        }
                     }
                 }
 
