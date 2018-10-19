@@ -8,9 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class WishlistItem {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-    private Integer originId;
     private Integer parentId;
     private Integer productId;
 
@@ -20,14 +18,6 @@ public class WishlistItem {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getOriginId() {
-        return originId;
-    }
-
-    public void setOriginId(Integer originId) {
-        this.originId = originId;
     }
 
     public Integer getParentId() {
