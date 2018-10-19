@@ -10,8 +10,8 @@ public class QuoteItem {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-    private Integer originId;
     private Integer parentId;
+    private Integer qty;
     private Integer productId;
     private Boolean isVirtual;
 
@@ -23,12 +23,12 @@ public class QuoteItem {
         this.id = id;
     }
 
-    public Integer getOriginId() {
-        return originId;
+    public Integer getQty() {
+        return qty;
     }
 
-    public void setOriginId(Integer originId) {
-        this.originId = originId;
+    public void setQty(Integer qty) {
+        this.qty = qty;
     }
 
     public Integer getParentId() {

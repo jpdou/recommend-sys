@@ -8,14 +8,11 @@ import javax.persistence.Id;
 @Entity
 public class Quote {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-    private Integer originId;
-    private Boolean isVirtual;
-    private String quoteCurrencyCode;
+    private int customerId;
     private String customerEmail;
     private String customerIsGuest;
-
+    private Boolean isVirtual;
 
     public Integer getId() {
         return id;
@@ -25,28 +22,12 @@ public class Quote {
         this.id = id;
     }
 
-    public Integer getOriginId() {
-        return originId;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setOriginId(Integer originId) {
-        this.originId = originId;
-    }
-
-    public Boolean getVirtual() {
-        return isVirtual;
-    }
-
-    public void setVirtual(Boolean virtual) {
-        isVirtual = virtual;
-    }
-
-    public String getQuoteCurrencyCode() {
-        return quoteCurrencyCode;
-    }
-
-    public void setQuoteCurrencyCode(String quoteCurrencyCode) {
-        this.quoteCurrencyCode = quoteCurrencyCode;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerEmail() {
@@ -63,5 +44,13 @@ public class Quote {
 
     public void setCustomerIsGuest(String customerIsGuest) {
         this.customerIsGuest = customerIsGuest;
+    }
+
+    public Boolean getVirtual() {
+        return isVirtual;
+    }
+
+    public void setVirtual(Boolean virtual) {
+        isVirtual = virtual;
     }
 }
