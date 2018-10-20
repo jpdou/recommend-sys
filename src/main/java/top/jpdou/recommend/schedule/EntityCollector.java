@@ -22,13 +22,13 @@ public class EntityCollector {
     @Autowired
     private WishlistManager wishlistManager;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 1000)
     public void collect()
     {
         orderManager.fetch();
 
         quoteManager.fetch();
 
-        wishlistManager.fetch();
+        //wishlistManager.fetch();
     }
 }

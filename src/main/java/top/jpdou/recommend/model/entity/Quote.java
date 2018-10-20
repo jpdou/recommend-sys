@@ -11,7 +11,6 @@ public class Quote {
     private Integer id;
     private int customerId;
     private String customerEmail;
-    private String customerIsGuest;
     private Boolean isVirtual;
 
     public Integer getId() {
@@ -36,14 +35,6 @@ public class Quote {
 
     public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
-    }
-
-    public String getCustomerIsGuest() {
-        return customerIsGuest;
-    }
-
-    public void setCustomerIsGuest(String customerIsGuest) {
-        this.customerIsGuest = customerIsGuest;
     }
 
     public Boolean getVirtual() {

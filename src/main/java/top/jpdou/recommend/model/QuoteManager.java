@@ -1,6 +1,7 @@
 package top.jpdou.recommend.model;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.http.HttpEntity;
@@ -14,12 +15,9 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.jpdou.recommend.api.EntityCollector;
-import top.jpdou.recommend.api.ProductRepository;
 import top.jpdou.recommend.api.QuoteItemRepository;
 import top.jpdou.recommend.api.QuoteRepository;
 import top.jpdou.recommend.model.entity.*;
-
-import java.util.Optional;
 
 @Component
 public class QuoteManager implements EntityCollector {
@@ -37,7 +35,7 @@ public class QuoteManager implements EntityCollector {
     private ScopeConfigManager scopeConfigManger;
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductManager productManager;
 
     private int getLastQuoteId()
     {
@@ -81,10 +79,19 @@ public class QuoteManager implements EntityCollector {
 
                     JsonObject customer = (JsonObject) quoteData.get("customer");
                     int customerId = 0;
-                    if (customer.get("id")!= null) {
-                        customerId = customer.get("id").getAsInt();
+                    if (customer.has("id")) {
+                        JsonElement id = customer.get("id");
+                        if (id != null) {
+                            customerId = id.getAsInt();
+                        }
                     }
-                    String customerEmail = customer.get("email").getAsString();
+                    String customerEmail = "";
+                    if (customer.has("email")) {
+                        JsonElement email = customer.get("email");
+                        if (!(email instanceof JsonNull)) {
+                            customerEmail = email.getAsString();
+                        }
+                    }
 
                     Quote quote = new Quote();
                     quote.setId(lastQuoteId);
@@ -94,15 +101,15 @@ public class QuoteManager implements EntityCollector {
 
                     quoteRepository.save(quote);
 
-                    for (JsonElement item : quoteData.get("items").getAsJsonArray()) {
-                        JsonObject _item = (JsonObject) item;
-                        if (!_item.get("is_virtual").getAsBoolean()) {
+                    if (quoteData.has("items")) {
+                        for (JsonElement item : quoteData.get("items").getAsJsonArray()) {
+                            JsonObject _item = (JsonObject) item;
 
                             int itemId = _item.get("item_id").getAsInt();
-                            String sku = _item.get("ku").getAsString();
+                            String sku = _item.get("sku").getAsString();
                             int qty = _item.get("qty").getAsInt();
 
-                            int productId = this.getProduct(sku);
+                            int productId = productManager.getIdBySku(sku);
 
                             QuoteItem quoteItem = new QuoteItem();
                             quoteItem.setId(itemId);
@@ -128,15 +135,5 @@ public class QuoteManager implements EntityCollector {
             lastQuoteId ++;
             scopeConfigManger.setValue(CONFIG_PATH_LAST_QUOTE_ID, String.valueOf(lastQuoteId));
         }
-    }
-
-    private int getProduct(String sku)
-    {
-        Optional result = productRepository.findById(sku);
-        if (result.isPresent()) {
-            Product product = (Product) result.get();
-            return product.getId();
-        }
-        return 0;
     }
 }
