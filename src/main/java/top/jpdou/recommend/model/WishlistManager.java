@@ -30,14 +30,14 @@ public class WishlistManager implements EntityCollector {
     @Autowired
     private ProductRepository productRepository;
 
-    private int lastWishlistId;
-
-    public WishlistManager()
+    private int getLastWishlistId()
     {
-        lastWishlistId = scopeConfigManger.getValueAsInteger(CONFIG_PATH_LAST_WISHLIST_ID);
+        return Integer.parseInt(scopeConfigManger.getValue(CONFIG_PATH_LAST_WISHLIST_ID, "1"));
     }
 
     public void fetch() {
+
+        int lastWishlistId = getLastWishlistId();
 
         String baseUrl = scopeConfigManger.getValue(CONFIG_PATH_FETCH_BASE_URL);
         String url = baseUrl + scopeConfigManger.getValue(CONFIG_PATH_FETCH_WISHLIST_URL).replace("{lastWishlistId}", String.valueOf(lastWishlistId));
@@ -77,10 +77,10 @@ public class WishlistManager implements EntityCollector {
         } catch (Exception e) {
             System.out.println("Fetch quote failed, error message: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            lastWishlistId ++;
+            scopeConfigManger.setValue(CONFIG_PATH_LAST_WISHLIST_ID, String.valueOf(lastWishlistId));
         }
-
-        scopeConfigManger.setValue(CONFIG_PATH_LAST_WISHLIST_ID, String.valueOf(lastWishlistId));
-        lastWishlistId ++;
     }
 
     private int getProduct(String sku)

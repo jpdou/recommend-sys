@@ -39,17 +39,17 @@ public class QuoteManager implements EntityCollector {
     @Autowired
     private ProductRepository productRepository;
 
-    private int lastQuoteId;
-
-    public QuoteManager()
+    private int getLastQuoteId()
     {
-        lastQuoteId = scopeConfigManger.getValueAsInteger(CONFIG_PATH_LAST_QUOTE_ID);
+        return Integer.parseInt(scopeConfigManger.getValue(CONFIG_PATH_LAST_QUOTE_ID, "1"));
     }
 
     public void fetch() {
 
+        int lastQuoteId = getLastQuoteId();
+
         String baseUrl = scopeConfigManger.getValue(CONFIG_PATH_FETCH_BASE_URL);
-        String url = baseUrl + scopeConfigManger.getValue(CONFIG_PATH_FETCH_QUOTE_URL).replace("{lastQuoteId}", String.valueOf(lastQuoteId));
+        String url = baseUrl + scopeConfigManger.getValue(CONFIG_PATH_FETCH_QUOTE_URL).replace("{cartId}", String.valueOf(lastQuoteId));
 
         System.out.println("Url: " + url);
 
@@ -124,9 +124,10 @@ public class QuoteManager implements EntityCollector {
         } catch (Exception e) {
             System.out.println("Fetch quote failed, error message: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            lastQuoteId ++;
+            scopeConfigManger.setValue(CONFIG_PATH_LAST_QUOTE_ID, String.valueOf(lastQuoteId));
         }
-        scopeConfigManger.setValue(CONFIG_PATH_LAST_QUOTE_ID, String.valueOf(lastQuoteId));
-        lastQuoteId ++;
     }
 
     private int getProduct(String sku)

@@ -8,19 +8,9 @@ import javax.persistence.Id;
 
 @Entity
 public class ScopeConfig {
-
-    private Integer id;
     @Id
     private String path;
     private String value;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getPath() {
         return path;

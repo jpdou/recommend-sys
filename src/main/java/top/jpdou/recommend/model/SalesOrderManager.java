@@ -34,14 +34,15 @@ public class SalesOrderManager implements EntityCollector {
     @Autowired
     private ScopeConfigManager scopeConfigManger;
 
-    private int lastOrderId;
-
-    public SalesOrderManager()
+    private int getLastOrderId()
     {
-        lastOrderId = scopeConfigManger.getValueAsInteger(CONFIG_PATH_LAST_ORDER_ID);
+        return Integer.parseInt(scopeConfigManger.getValue(CONFIG_PATH_LAST_ORDER_ID, "1"));
     }
 
     public void fetch() {
+
+        int lastOrderId = getLastOrderId();
+
         String baseUrl = scopeConfigManger.getValue(CONFIG_PATH_FETCH_BASE_URL);
         String url = baseUrl + scopeConfigManger.getValue(CONFIG_PATH_FETCH_ORDER_URL).replace("{id}", String.valueOf(lastOrderId));
 
@@ -120,9 +121,9 @@ public class SalesOrderManager implements EntityCollector {
         } catch (Exception e) {
             System.out.println("Fetch order failed, error message: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            lastOrderId ++;
+            scopeConfigManger.setValue(CONFIG_PATH_LAST_ORDER_ID, String.valueOf(lastOrderId));
         }
-
-        scopeConfigManger.setValue(CONFIG_PATH_LAST_ORDER_ID, String.valueOf(lastOrderId));
-        lastOrderId ++;
     }
 }

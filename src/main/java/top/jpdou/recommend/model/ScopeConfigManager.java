@@ -18,21 +18,6 @@ public class ScopeConfigManager {
         values = new HashMap<>();
     }
 
-    public Integer getValueAsInteger(String path)
-    {
-        return Integer.parseInt(getValue(path));
-    }
-
-    public Boolean getValueAsBoolean(String path)
-    {
-        return Boolean.parseBoolean(getValue(path));
-    }
-
-    public float getValueAsFloat(String path)
-    {
-        return Float.parseFloat(getValue(path));
-    }
-
     public String getValue(String path)
     {
         if (!values.containsKey(path)) {
@@ -43,6 +28,27 @@ public class ScopeConfigManager {
                 ScopeConfig scopeConfig = (ScopeConfig) result.get();
                 String value = scopeConfig.getValue();
                 values.put(path, value);
+            } else {
+                values.put(path, "");
+            }
+        }
+        return values.get(path);
+    }
+
+    public String getValue(String path, String defaultVal)
+    {
+        if (!values.containsKey(path)) {
+
+            Optional result = scopeConfigRepository.findById(path);
+
+            System.out.println(result);
+
+            if (result.isPresent()) {
+                ScopeConfig scopeConfig = (ScopeConfig) result.get();
+                String value = scopeConfig.getValue();
+                values.put(path, value);
+            } else {
+                values.put(path, defaultVal);
             }
         }
         return values.get(path);
