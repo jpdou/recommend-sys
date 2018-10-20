@@ -1,4 +1,4 @@
-package top.jpdou.recommend.model;
+package top.jpdou.recommend.api;
 
 public interface EntityCollector {
 

@@ -1,6 +1,5 @@
 package top.jpdou.recommend.model;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -14,6 +13,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import top.jpdou.recommend.api.EntityCollector;
+import top.jpdou.recommend.api.OrderItemRepository;
+import top.jpdou.recommend.api.SalesOrderRepository;
 import top.jpdou.recommend.model.entity.OrderItem;
 import top.jpdou.recommend.model.entity.SalesOrder;
 

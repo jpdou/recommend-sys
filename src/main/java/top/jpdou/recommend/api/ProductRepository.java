@@ -1,4 +1,4 @@
-package top.jpdou.recommend.model;
+package top.jpdou.recommend.api;
 
 import org.springframework.data.repository.CrudRepository;
 import top.jpdou.recommend.model.entity.Product;

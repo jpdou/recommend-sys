@@ -1,6 +1,5 @@
 package top.jpdou.recommend.model;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.http.HttpEntity;
@@ -13,15 +12,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import top.jpdou.recommend.api.EntityCollector;
+import top.jpdou.recommend.api.ProductRepository;
 import top.jpdou.recommend.model.entity.Product;
-import top.jpdou.recommend.model.entity.Quote;
-import top.jpdou.recommend.model.entity.QuoteItem;
-import top.jpdou.recommend.model.entity.Wishlist;
 
 import java.util.Optional;
 
 @Component
-public class WishlistManager implements EntityCollector{
+public class WishlistManager implements EntityCollector {
 
     final static private String CONFIG_PATH_FETCH_WISHLIST_URL = "entity_collector/url/wishlist";
     final static private String CONFIG_PATH_LAST_WISHLIST_ID = "entity_collector/wishlist/last_wishlist_id";

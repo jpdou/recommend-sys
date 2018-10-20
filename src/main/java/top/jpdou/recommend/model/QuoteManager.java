@@ -13,12 +13,16 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import top.jpdou.recommend.api.EntityCollector;
+import top.jpdou.recommend.api.ProductRepository;
+import top.jpdou.recommend.api.QuoteItemRepository;
+import top.jpdou.recommend.api.QuoteRepository;
 import top.jpdou.recommend.model.entity.*;
 
 import java.util.Optional;
 
 @Component
-public class QuoteManager implements EntityCollector{
+public class QuoteManager implements EntityCollector {
 
     final static private String CONFIG_PATH_FETCH_QUOTE_URL = "entity_collector/url/quote";
     final static private String CONFIG_PATH_LAST_QUOTE_ID = "entity_collector/quote/last_quote_id";
