@@ -8,9 +8,8 @@ import javax.persistence.Id;
 @Entity
 public class ViewedHistory {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-    private String customerId;
+    private Integer customerId;
 
     public Integer getId() {
         return id;
@@ -20,11 +19,11 @@ public class ViewedHistory {
         this.id = id;
     }
 
-    public String getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 }

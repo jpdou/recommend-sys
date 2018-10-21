@@ -8,10 +8,10 @@ import javax.persistence.Id;
 @Entity
 public class ViewedHistoryItem {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private Integer parentId;
     private Integer productId;
+    private Integer viewCount;
 
     public Integer getId() {
         return id;
@@ -35,5 +35,18 @@ public class ViewedHistoryItem {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public void increaseViewCount()
+    {
+        this.viewCount++;
     }
 }
