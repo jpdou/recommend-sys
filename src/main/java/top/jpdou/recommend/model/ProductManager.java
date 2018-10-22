@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.jpdou.recommend.api.ProductRepository;
 import top.jpdou.recommend.model.entity.Product;
-import top.jpdou.recommend.model.entity.Quote;
-import top.jpdou.recommend.model.entity.QuoteItem;
 
 import java.util.HashMap;
 

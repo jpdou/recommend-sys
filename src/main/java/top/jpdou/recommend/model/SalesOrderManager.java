@@ -34,6 +34,9 @@ public class SalesOrderManager implements EntityCollector {
     @Autowired
     private ScopeConfigManager scopeConfigManger;
 
+    @Autowired
+    private CustomerManager customerManager;
+
     private int getLastOrderId()
     {
         return Integer.parseInt(scopeConfigManger.getValue(CONFIG_PATH_LAST_ORDER_ID, "1"));
@@ -67,7 +70,6 @@ public class SalesOrderManager implements EntityCollector {
 
 
                 String responseText = EntityUtils.toString(entity);
-                System.out.println(responseText);
 
                 JsonParser parser = new JsonParser();
                 JsonObject orderData = (JsonObject) parser.parse(responseText);
@@ -79,6 +81,8 @@ public class SalesOrderManager implements EntityCollector {
                     int customerId = 0;
                     if (orderData.get("customer_id") != null) {
                         customerId = orderData.get("customer_id").getAsInt();
+                    } else {
+                        customerId = customerManager.getIdByEmail(customerEmail);
                     }
                     String status = orderData.get("status").getAsString();
 
