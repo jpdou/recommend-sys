@@ -19,6 +19,8 @@ import top.jpdou.recommend.api.SalesOrderRepository;
 import top.jpdou.recommend.model.entity.OrderItem;
 import top.jpdou.recommend.model.entity.SalesOrder;
 
+import java.util.ArrayList;
+
 @Component
 public class SalesOrderManager implements EntityCollector {
 
@@ -84,34 +86,37 @@ public class SalesOrderManager implements EntityCollector {
                     } else {
                         customerId = customerManager.getIdByEmail(customerEmail);
                     }
-                    String status = orderData.get("status").getAsString();
 
-                    SalesOrder order = new SalesOrder();
-                    order.setId(lastOrderId);
-                    order.setQuoteId(quoteId);
-                    order.setCustomerEmail(customerEmail);
-                    order.setCustomerId(customerId);
-                    order.setStatus(status);
-                    order.setVirtual(false);
+                    if (customerId != 0) {
+                        String status = orderData.get("status").getAsString();
 
-                    orderRepository.save(order);
+                        SalesOrder order = new SalesOrder();
+                        order.setId(lastOrderId);
+                        order.setQuoteId(quoteId);
+                        order.setCustomerEmail(customerEmail);
+                        order.setCustomerId(customerId);
+                        order.setStatus(status);
+                        order.setVirtual(false);
 
-                    for (JsonElement item : orderData.get("items").getAsJsonArray()) {
+                        orderRepository.save(order);
 
-                        if (!((JsonObject) item).get("is_virtual").getAsBoolean()) {
+                        for (JsonElement item : orderData.get("items").getAsJsonArray()) {
 
-                            int itemId = ((JsonObject) item).get("item_id").getAsInt();
-                            int productId = ((JsonObject) item).get("product_id").getAsInt();
-                            int qty = ((JsonObject) item).get("qty_ordered").getAsInt();
+                            if (!((JsonObject) item).get("is_virtual").getAsBoolean()) {
 
-                            OrderItem orderItem = new OrderItem();
-                            orderItem.setId(itemId);
-                            orderItem.setProductId(productId);
-                            orderItem.setQty(qty);
-                            orderItem.setParentId(lastOrderId);
-                            orderItem.setVirtual(false);
+                                int itemId = ((JsonObject) item).get("item_id").getAsInt();
+                                int productId = ((JsonObject) item).get("product_id").getAsInt();
+                                int qty = ((JsonObject) item).get("qty_ordered").getAsInt();
 
-                            orderItemRepository.save(orderItem);
+                                OrderItem orderItem = new OrderItem();
+                                orderItem.setId(itemId);
+                                orderItem.setProductId(productId);
+                                orderItem.setQty(qty);
+                                orderItem.setParentId(lastOrderId);
+                                orderItem.setVirtual(false);
+
+                                orderItemRepository.save(orderItem);
+                            }
                         }
                     }
                 }
@@ -129,5 +134,16 @@ public class SalesOrderManager implements EntityCollector {
             lastOrderId ++;
             scopeConfigManger.setValue(CONFIG_PATH_LAST_ORDER_ID, String.valueOf(lastOrderId));
         }
+    }
+
+    public ArrayList<SalesOrder> getOrdersByCustomerId(int customerId)
+    {
+        Iterable results = orderRepository.findByCustomerId(customerId);
+        ArrayList<SalesOrder> orders = new ArrayList<>();
+        for (Object result : results) {
+            SalesOrder order = (SalesOrder) result;
+            orders.add(order);
+        }
+        return orders;
     }
 }

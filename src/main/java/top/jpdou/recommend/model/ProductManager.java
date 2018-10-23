@@ -18,6 +18,7 @@ import top.jpdou.recommend.api.ProductRepository;
 import top.jpdou.recommend.model.entity.Product;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static top.jpdou.recommend.api.EntityCollector.*;
 
@@ -42,7 +43,14 @@ public class ProductManager {
     public int getIdBySku(String sku)
     {
         if (!products.containsKey(sku)) {
-            Product product = fetch(sku);
+            Product product;
+            Optional result = repository.findBySku(sku);
+            if (result.isPresent()) {
+                product = (Product) result.get();
+            } else {
+                product = fetch(sku);
+            }
+
             if (product.getId() != null) {
                 products.put(sku, product.getId());
             } else {
