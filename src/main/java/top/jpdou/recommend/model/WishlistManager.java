@@ -82,14 +82,4 @@ public class WishlistManager implements EntityCollector {
             scopeConfigManger.setValue(CONFIG_PATH_LAST_WISHLIST_ID, String.valueOf(lastWishlistId));
         }
     }
-
-    private int getProduct(String sku)
-    {
-        Optional result = productRepository.findById(sku);
-        if (result.isPresent()) {
-            Product product = (Product) result.get();
-            return product.getId();
-        }
-        return 0;
-    }
 }

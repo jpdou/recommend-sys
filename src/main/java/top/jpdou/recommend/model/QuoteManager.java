@@ -37,6 +37,9 @@ public class QuoteManager implements EntityCollector {
     @Autowired
     private ProductManager productManager;
 
+    @Autowired
+    private CustomerManager customerManager;
+
     private int getLastQuoteId()
     {
         return Integer.parseInt(scopeConfigManger.getValue(CONFIG_PATH_LAST_QUOTE_ID, "1"));
@@ -68,29 +71,31 @@ public class QuoteManager implements EntityCollector {
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 HttpEntity entity = response.getEntity();
 
-
                 String responseText = EntityUtils.toString(entity);
-                System.out.println(responseText);
 
                 JsonParser parser = new JsonParser();
                 JsonObject quoteData = (JsonObject) parser.parse(responseText);
 
                 if (!quoteData.get("is_virtual").getAsBoolean()) { // 只记录非虚拟订单
 
-                    JsonObject customer = (JsonObject) quoteData.get("customer");
-                    int customerId = 0;
-                    if (customer.has("id")) {
-                        JsonElement id = customer.get("id");
-                        if (id != null) {
-                            customerId = id.getAsInt();
-                        }
-                    }
+                    JsonObject customerData = (JsonObject) quoteData.get("customer");
+
                     String customerEmail = "";
-                    if (customer.has("email")) {
-                        JsonElement email = customer.get("email");
+                    if (customerData.has("email")) {
+                        JsonElement email = customerData.get("email");
                         if (!(email instanceof JsonNull)) {
                             customerEmail = email.getAsString();
                         }
+                    }
+
+                    int customerId = 0;
+                    if (customerData.has("id")) {
+                        JsonElement id = customerData.get("id");
+                        if (id != null) {
+                            customerId = id.getAsInt();
+                        }
+                    } else if (customerEmail.length() > 1) {
+                        customerId = customerManager.getIdByEmail(customerEmail);
                     }
 
                     Quote quote = new Quote();

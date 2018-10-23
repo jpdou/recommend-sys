@@ -3,6 +3,7 @@ package top.jpdou.recommend.model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.jpdou.recommend.api.ScopeConfigRepository;
+import top.jpdou.recommend.model.entity.ScopeConfig;
 
 import java.util.*;
 
