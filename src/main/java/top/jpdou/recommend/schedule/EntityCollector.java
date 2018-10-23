@@ -25,10 +25,6 @@ public class EntityCollector {
     @Scheduled(fixedDelay = 1000)
     public void collect()
     {
-        orderManager.fetch();
 
-        quoteManager.fetch();
-
-        //wishlistManager.fetch();
     }
 }
