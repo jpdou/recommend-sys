@@ -19,6 +19,8 @@ import top.jpdou.recommend.api.QuoteItemRepository;
 import top.jpdou.recommend.api.QuoteRepository;
 import top.jpdou.recommend.model.entity.*;
 
+import java.util.ArrayList;
+
 @Component
 public class QuoteManager implements EntityCollector {
 
@@ -140,5 +142,16 @@ public class QuoteManager implements EntityCollector {
             lastQuoteId ++;
             scopeConfigManger.setValue(CONFIG_PATH_LAST_QUOTE_ID, String.valueOf(lastQuoteId));
         }
+    }
+
+    public ArrayList<Quote> getQuotesByCustomerId(int customerId)
+    {
+        Iterable results = quoteRepository.findByCustomerId(customerId);
+        ArrayList<Quote> quotes = new ArrayList<>();
+        for (Object result : results) {
+            Quote quote = (Quote) result;
+            quotes.add(quote);
+        }
+        return quotes;
     }
 }

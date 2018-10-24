@@ -10,6 +10,7 @@ public class Wishlist {
     @Id
     private Integer id;
     private Integer customerId;
+    private Integer productId;
 
     public Integer getId() {
         return id;
@@ -25,5 +26,13 @@ public class Wishlist {
 
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 }
