@@ -1,6 +1,7 @@
 package top.jpdou.recommend.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import top.jpdou.recommend.api.ScopeConfigRepository;
 import top.jpdou.recommend.model.entity.ScopeConfig;
@@ -13,10 +14,12 @@ public class ScopeConfigManager {
     private ScopeConfigRepository scopeConfigRepository;
 
     private HashMap<String, String> values;
+    private ArrayList<ScopeConfig> waitingSaveScopeConfigEntities;
 
     public ScopeConfigManager()
     {
         values = new HashMap<>();
+        waitingSaveScopeConfigEntities = new ArrayList<>();
     }
 
     public String getValue(String path)
@@ -42,8 +45,6 @@ public class ScopeConfigManager {
 
             Optional result = scopeConfigRepository.findById(path);
 
-            System.out.println(result);
-
             if (result.isPresent()) {
                 ScopeConfig scopeConfig = (ScopeConfig) result.get();
                 String value = scopeConfig.getValue();
@@ -59,9 +60,18 @@ public class ScopeConfigManager {
     {
         values.put(path, value);
 
-        ScopeConfig config = new ScopeConfig();
-        config.setValue(value);
-        config.setPath(path);
-        scopeConfigRepository.save(config);
+        ScopeConfig scopeConfig = new ScopeConfig();
+        scopeConfig.setValue(value);
+        scopeConfig.setPath(path);
+        waitingSaveScopeConfigEntities.add(scopeConfig);
+    }
+
+    @Scheduled(fixedDelay = 15000)
+    public void backgroundPersistence()
+    {
+        for (ScopeConfig scopeConfig : waitingSaveScopeConfigEntities) {
+            scopeConfigRepository.save(scopeConfig);
+            waitingSaveScopeConfigEntities.remove(scopeConfig);
+        }
     }
 }

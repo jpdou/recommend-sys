@@ -17,6 +17,7 @@ import top.jpdou.recommend.api.ProductRepository;
 import top.jpdou.recommend.model.entity.Customer;
 import top.jpdou.recommend.model.entity.Product;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -34,6 +35,8 @@ public class CustomerManager {
     private ScopeConfigManager scopeConfigManger;
 
     private HashMap<Integer, Customer> customers;
+
+    private ArrayList<Customer> all;
 
     public CustomerManager()
     {
@@ -67,5 +70,22 @@ public class CustomerManager {
         customer.setId(customerId);
         repository.save(customer);
         customers.put(customerId, customer);
+    }
+
+    public ArrayList<Customer> getAllCustomer()
+    {
+        if (all == null) {
+            all = new ArrayList<>();
+            Iterable<Customer> _customers = repository.findAll();
+            for (Customer customer : _customers) {
+                all.add(customer);
+            }
+        }
+        return all;
+    }
+
+    public int getNumOfAll()
+    {
+        return this.getAllCustomer().size();
     }
 }
